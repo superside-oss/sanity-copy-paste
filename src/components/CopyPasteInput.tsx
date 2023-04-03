@@ -140,12 +140,12 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
         const _id = page[0]
         const published = _id.replace(/^drafts\./, '')
         const draftsVersionExist = await client.fetch(
-          `!(count(*[_id == 'drafts.${published}'])==0)`
+          `!(count(*[_id == 'drafts.${published}']) == 0)`
         )
 
         const updateDocument = async () => {
           await client
-            .patch(page[0])
+            .patch(`drafts.${published}`)
             .setIfMissing({[blocksName]: []})
             .insert('after', `${blocksName}[-1]`, [deepSearchReplace(objCopy)])
             .commit({
@@ -174,7 +174,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
         }
 
         if (draftsVersionExist) {
-          updateDocument()
+          await updateDocument()
         } else {
           await client.fetch(`*[_id == '${published}'][0]`).then(async (result) => {
             result._id = `drafts.${published}`

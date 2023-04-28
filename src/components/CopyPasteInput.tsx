@@ -136,7 +136,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
     const pagesForPatch = Object.entries(checkedPages).filter((page) => page[1])
     let i = 0
     const patchPages = new Promise<void>((resolve) => {
-      pagesForPatch.forEach(async (page, index, array) => {
+      pagesForPatch.forEach(async (page) => {
         const _id = page[0]
         const published = _id.replace(/^drafts\./, '')
         const draftsVersionExist = await client.fetch(
@@ -153,7 +153,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
             })
             .then(() => {
               i++
-              if (index === array.length - 1) {
+              if (i === pagesForPatch.length - 1) {
                 resolve()
               }
             })
@@ -167,7 +167,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
                     : err.description
                 }`,
               })
-              if (index === array.length - 1) {
+              if (i === pagesForPatch.length - 1) {
                 resolve()
               }
             })
@@ -191,10 +191,12 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
     patchPages.then(() => {
       onClose()
       if (i > 0) {
-        toast.push({
-          status: 'success',
-          title: `Duplicated to ${i} pages successfully`,
-        })
+        setTimeout(() => {
+          toast.push({
+            status: 'success',
+            title: `Duplicated to ${i} pages successfully`,
+          })
+        }, 1000)
       }
     })
   }

@@ -4,7 +4,7 @@
 
 With this plugin, you can finally copy/paste referenced blocks in `array` type of fields in Sanity Studio.
 
-![](preview.gif)
+![](https://github.com/superside-oss/sanity-copy-paste/raw/main/preview.gif)
 
 ## Installation
 

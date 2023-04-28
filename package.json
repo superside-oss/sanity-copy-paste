@@ -6,6 +6,10 @@
     "sanity",
     "sanity-plugin"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/superside-oss/sanity-copy-paste.git"
+  },
   "license": "MIT",
   "author": "Daniel Zagidullin <daniel.zagidullin@superside.com>",
   "exports": {

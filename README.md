@@ -1,4 +1,4 @@
-# sanity-plugin-copy-paste
+# @superside-oss/sanity-plugin-copy-paste
 
 > This is a **Sanity Studio v3** plugin.
 
@@ -9,13 +9,13 @@ With this plugin, you can finally copy/paste referenced blocks in `array` type o
 ## Installation
 
 ```sh
-npm install sanity-plugin-copy-paste
+npm i @superside-oss/sanity-plugin-copy-paste
 ```
 
 or
 
 ```sh
-yarn add sanity-plugin-copy-paste
+yarn add @superside-oss/sanity-plugin-copy-paste
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Add it as a plugin in `sanity.config.ts` (or .js):
 
 ```ts
 import {defineConfig} from 'sanity'
-import {copyPastePlugin} from 'sanity-plugin-copy-paste'
+import {copyPastePlugin} from '@superside-oss/sanity-plugin-copy-paste'
 
 export default defineConfig({
   //...
@@ -35,7 +35,7 @@ export default defineConfig({
 And then insert in any object you want as a field:
 
 ```ts
-import {copyPaste} from 'sanity-plugin-copy-paste'
+import {copyPaste} from '@superside-oss/sanity-plugin-copy-paste'
 
 export default defineType({
   // ...

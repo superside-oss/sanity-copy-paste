@@ -1,6 +1,6 @@
 {
   "name": "@superside-oss/sanity-plugin-copy-paste",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "keywords": [
     "sanity",
@@ -40,8 +40,7 @@
     "lint": "eslint .",
     "prepublishOnly": "run-s build",
     "watch": "pkg-utils watch --strict",
-    "prepare": "husky install",
-    "bump-version": "node bump-version.js"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@sanity/incompatible-plugin": "^1.0.4",

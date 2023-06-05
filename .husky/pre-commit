@@ -1,4 +1,6 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
+npm run bump-version
+git add package.json
+. "$(dirname "$0")/_/husky.sh"
 npx lint-staged

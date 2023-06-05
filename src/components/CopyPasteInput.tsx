@@ -18,14 +18,7 @@ import {
 import SelectedPage from './SelectedPage'
 import {deepSearchReplace, writeObjectToLs, getObjectFromLs, pagesQuery} from '../utils'
 import {CopyPasteInputType} from '../types'
-
-const SpinnerFixed: React.FC = () => {
-  return (
-    <Box marginTop={1}>
-      <Spinner muted />
-    </Box>
-  )
-}
+import {SpinnerFixed} from './SpinnerFixed'
 
 export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
   const client = useClient({apiVersion: '2021-10-21'})

@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/superside-oss/sanity-copy-paste/compare/v1.0.0...v1.0.1) (2023-06-05)
+
+### Bug Fixes
+
+- version ([149ca8b](https://github.com/superside-oss/sanity-copy-paste/commit/149ca8b31d5e35d15e8e3f3f792450a9bc7230e4))
+
 ## 1.0.0 (2023-06-05)
 
 ### Features

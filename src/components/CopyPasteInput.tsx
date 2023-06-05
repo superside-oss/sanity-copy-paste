@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
-import React from 'react'
+import React, {useEffect, useCallback, useState} from 'react'
 import {useFormValue, useClient} from 'sanity'
-import {useEffect, useCallback, useState} from 'react'
 import {BiCopy, BiPaste, BiCopyAlt} from 'react-icons/bi'
 import {
   Stack,
@@ -42,29 +41,31 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
   const onClose = useCallback(() => setOpen(false), [])
   const onOpen = useCallback(() => setOpen(true), [])
 
-  const match = id.match(/_key=="(\w+)"/) || []
+  const match = RegExp(/_key=="(\w+)"/).exec(id) ?? []
   const extractedString = match[1]
   const blocksName = id.split('[')[0]
+
   const blocks = useFormValue([blocksName]) as {_key: string}[]
-  const parent = blocks.find((block) => block._key === extractedString) as {
+  const documentId = useFormValue(['_id']) as string
+  const documentType = useFormValue(['_type']) as string
+
+  const parent = blocks?.find((block) => block._key === extractedString) as {
     _type: string
     _key: string
   }
-  const parentIndex = blocks.findIndex((block) => block._key === extractedString)
-  const currentURL = window.location.href
-  const urlArray = currentURL.split(';')
-  const documentId = urlArray[urlArray.length - 1]
-  const documentTypeArray = currentURL.split('/')
-  const documentType = documentTypeArray[documentTypeArray.length - 1].split(';')[0]
+  const parentIndex = blocks?.findIndex((block) => block._key === extractedString)
 
   useEffect(() => {
     async function retrievePages() {
       const pages = await client.fetch(pagesQuery, {documentType})
 
-      setPagesForMultipleCopy(pages)
+      return pages
     }
 
     retrievePages()
+      .then((pages) => setPagesForMultipleCopy(pages))
+      .catch((error) => console.error(error))
+
     setAllowedToPaste(true)
   }, [client, documentType])
 
@@ -144,10 +145,12 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
         )
 
         const updateDocument = async () => {
+          const copiedBlock = deepSearchReplace(objCopy)
+
           await client
             .patch(`drafts.${published}`)
             .setIfMissing({[blocksName]: []})
-            .insert('after', `${blocksName}[-1]`, [deepSearchReplace(objCopy)])
+            .insert('after', `${blocksName}[-1]`, [copiedBlock])
             .commit({
               autoGenerateArrayKeys: true,
             })
@@ -157,14 +160,14 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
                 resolve()
               }
             })
-            .catch((err) => {
+            .catch(async (err) => {
               console.error(err)
               toast.push({
                 status: 'error',
                 title: `Something went wrong: ${
-                  err.details?.items
-                    ? err.details.items.map((item: any) => item.error.description).join('; ')
-                    : err.description
+                  err?.details?.items?.map((item: any) => item?.error?.description)?.join('; ') ||
+                  err?.description ||
+                  JSON.stringify(err)
                 }`,
               })
               if (i === pagesForPatch.length - 1) {
@@ -197,6 +200,11 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
             title: `Duplicated to ${i} pages successfully`,
           })
         }, 1000)
+      } else {
+        toast.push({
+          status: 'warning',
+          title: `Duplicated to ${i} pages with some warnings`,
+        })
       }
     })
   }

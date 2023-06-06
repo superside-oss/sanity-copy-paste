@@ -42,11 +42,11 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
   const documentId = useFormValue(['_id']) as string
   const documentType = useFormValue(['_type']) as string
 
-  const parent = blocks?.find((block) => block._key === extractedString) as {
+  const parent = blocks?.find((block) => block?._key === extractedString) as {
     _type: string
     _key: string
   }
-  const parentIndex = blocks?.findIndex((block) => block._key === extractedString)
+  const parentIndex = blocks?.findIndex((block) => block?._key === extractedString)
 
   useEffect(() => {
     async function retrievePages() {
@@ -65,7 +65,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
   const onPaste = async () => {
     setLoadingPaste(true)
 
-    const objCopy = deepSearchReplace(getObjectFromLs(parent._type))
+    const objCopy = deepSearchReplace(getObjectFromLs(parent?._type))
     const nestedPath = `${blocksName}[${parentIndex}]`
     const published = documentId.replace(/^drafts\./, '')
     const draftsVersionExist = await client.fetch(`!(count(*[_id == 'drafts.${published}'])==0)`)
@@ -91,7 +91,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
             status: 'error',
             title: `Something went wrong: ${
               err.details?.items
-                ? err?.details?.items.map((item: any) => item.error.description).join('; ')
+                ? err?.details?.items.map((item: any) => item?.error?.description).join('; ')
                 : err?.details?.description
             }`,
           })
@@ -126,11 +126,11 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
   }
 
   const onSubmit = () => {
-    const objCopy = getObjectFromLs(parent._type)
+    const objCopy = getObjectFromLs(parent?._type)
     const pagesForPatch = Object.entries(checkedPages).filter((page) => page[1])
     let i = 0
     const patchPages = new Promise<void>((resolve) => {
-      pagesForPatch.forEach(async (page) => {
+      pagesForPatch?.forEach(async (page) => {
         const _id = page[0]
         const published = _id.replace(/^drafts\./, '')
         const draftsVersionExist = await client.fetch(
@@ -149,7 +149,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
             })
             .then(() => {
               i++
-              if (i === pagesForPatch.length - 1) {
+              if (i === pagesForPatch?.length - 1) {
                 resolve()
               }
             })
@@ -163,7 +163,7 @@ export const CopyPasteInput: React.FC<CopyPasteInputType> = ({id}) => {
                   JSON.stringify(err)
                 }`,
               })
-              if (i === pagesForPatch.length - 1) {
+              if (i === pagesForPatch?.length - 1) {
                 resolve()
               }
             })
